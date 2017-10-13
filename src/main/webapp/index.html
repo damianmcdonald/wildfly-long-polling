@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Long Polling Example</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+$( document ).ready( function() {
+
+    $( '#start-long-polling' ).click( function( event ) {
+        event.preventDefault();
+        console.log("Calling poll()");
+        poll();
+    });
+
+    /* long-polling function that calls creates a looped call to the server.
+     * This looped call executes:
+     * - every 60 seconds if there is no data sent from server;
+     * - immediately if data is received from the server;
+     */
+    function poll(){
+        $.ajax({
+            url: "LongPollingServlet",
+            success: function(data, status, jqXHR) {
+                // do something with the data
+                console.log(data);
+                $('#long-polling-results').append("<li>"+data+"</li>");
+                setTimeout( poll, 10 );
+            },
+            error: function(jqXHR, status, errorThrown) {
+                if (status=='timeout') {
+                    console.log( 'request timed out.' );
+                    setTimeout( poll, 10 );
+                }
+                else {
+                    console.log(status);
+                    setTimeout( poll, 60000 );
+                }
+            },
+            dataType: "text",
+            type:'GET',
+            timeout: 60000
+        });
+    }
+
+}); // (document).ready
+
+</script>
+</head>
+<body>
+<div>Long-polling example</div>
+<hr>
+<div>
+    <button id="start-long-polling">Start long-polling request</button><br>
+    <ul id="long-polling-results"></ul>
+</div>
+
+</body>
+</html>
