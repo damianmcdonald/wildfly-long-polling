@@ -27,9 +27,9 @@ public class LongPollingEventSimulator {
 
         // determine which long polling clients are registered for dossiers that have event data
         final List<LongPollingSession> lpsClients = new ArrayList<LongPollingSession>(LPS_QUEUE.size());
-        Iterator<LongPollingSession> itr = LPS_QUEUE.iterator();
+        final Iterator<LongPollingSession> itr = LPS_QUEUE.iterator();
         while (itr.hasNext()) {
-            LongPollingSession lps = itr.next();
+            final LongPollingSession lps = itr.next();
             if (LongPollingController.EVENT_DATA.containsKey(lps.getDossierId())) {
                 lpsClients.add(lps);
                 dossierIds.add(lps.getDossierId());
@@ -55,9 +55,9 @@ public class LongPollingEventSimulator {
                 });
 
         // clean up the global event map if we have already sent client responses
-        Iterator<Map.Entry<Long, String>> it = LongPollingController.EVENT_DATA.entrySet().iterator();
+        final Iterator<Map.Entry<Long, String>> it = LongPollingController.EVENT_DATA.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<Long, String> pair = it.next();
+            final Map.Entry<Long, String> pair = it.next();
             if (dossierIds.contains(pair.getKey())) {
                 it.remove();
             }
