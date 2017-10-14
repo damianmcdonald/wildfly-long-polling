@@ -17,7 +17,7 @@ public class LongPollingEventSimulator {
 
     // Simulated event handler
     private static void newEvent() {
-        LOGGER.log(Level.INFO, "New event fired!");
+        LOGGER.log(Level.FINE, "New event fired!");
         // send the event data to the long polling clients that are registered for specific dossier event data
         LONG_POLLING_QUEUE.stream()
                 .filter(e -> LongPollingController.EVENT_DATA.containsKey(e.getDossierId()))
@@ -26,7 +26,7 @@ public class LongPollingEventSimulator {
                     try {
                         LOGGER.log(Level.INFO, "Long-polling client found for dossierId: " + lps.getDossierId());
                         LOGGER.log(Level.INFO,
-                                "Writing response to client: " + lps.getAsyncResponse() + " : "
+                                "Writing response to client : "
                                         + LongPollingController.EVENT_DATA.getOrDefault(lps.getDossierId(), "Error: >>> Failed to retrieve data from event map!"));
                         lps.getAsyncResponse().
                                 resume(LongPollingController.EVENT_DATA.getOrDefault(lps.getDossierId(), "Error: >>> Failed to retrieve data from event map!"));
