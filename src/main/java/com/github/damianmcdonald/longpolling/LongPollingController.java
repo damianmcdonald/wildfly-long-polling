@@ -8,7 +8,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -26,7 +25,7 @@ public class LongPollingController {
     public void registerClient(@PathParam("dossierId") final long dossierId, @Suspended final AsyncResponse asyncResponse) {
         LOGGER.log(Level.INFO, "Registering client for dossier id: " + dossierId);
         // Add paused http requests to event queue
-        LongPollingEventSimulator.LPS_QUEUE.add(new LongPollingSession(dossierId, asyncResponse));
+        LongPollingEventSimulator.LONG_POLLING_QUEUE.add(new LongPollingSession(dossierId, asyncResponse));
     }
 
     @POST
