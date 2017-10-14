@@ -7,10 +7,21 @@
 <script type="text/javascript">
 $( document ).ready( function() {
 
-    $( '#start-long-polling' ).click( function( event ) {
+    $( '#register' ).click( function( event ) {
         event.preventDefault();
-        console.log("Calling poll()");
-        poll();
+        var dossierId = $('#dossier-id-input').val();
+        console.log("Calling poll() with dossier id: " + dossierId);
+        $('#results').append("<li><span style=\"color:blue;\">Registered client for long-polling for dossier id "+dossierId+"</li>");
+        poll(dossierId);
+    });
+
+    $( '#simulate' ).click( function( event ) {
+        event.preventDefault();
+        var dossierId = $('#dossier-id-input').val();
+        console.log("Calling simulate() with dossier id: " + dossierId);
+        simulate(dossierId);
+        $('#results').append("<li><span style=\"color:green;\">Simulating event for dossier id "+dossierId+"</li>");
+        $('#results').append("<li><span style=\"color:green;\">Be patient, the event is fired asynchronously and may have a delay of a few seconds</li>");
     });
 
     /* long-polling function that calls creates a looped call to the server.
@@ -18,28 +29,39 @@ $( document ).ready( function() {
      * - every 60 seconds if there is no data sent from server;
      * - immediately if data is received from the server;
      */
-    function poll(){
+    function poll(dossierId){
         $.ajax({
-            url: "LongPollingServlet",
+            url: "long-polling-example/register/"+dossierId,
             success: function(data, status, jqXHR) {
                 // do something with the data
                 console.log(data);
-                $('#long-polling-results').append("<li>"+data+"</li>");
-                setTimeout( poll, 10 );
+                $('#results').append("<li><span style=\"color:purple; font-weight: bold;\">"+data+"</li>");
+                setTimeout( poll(dossierId), 10 );
             },
             error: function(jqXHR, status, errorThrown) {
                 if (status=='timeout') {
                     console.log( 'request timed out.' );
-                    setTimeout( poll, 10 );
+                    setTimeout( poll(dossierId), 10 );
                 }
                 else {
                     console.log(status);
-                    setTimeout( poll, 60000 );
+                    setTimeout( poll(dossierId), 60000 );
                 }
             },
             dataType: "text",
             type:'GET',
             timeout: 60000
+        });
+    }
+
+    function simulate(dossierId){
+        $.ajax({
+            url: "long-polling-example/simulate/"+dossierId,
+            success: function(data, status, jqXHR) {
+                // do something with the data
+                console.log("Event simulated successfully.");
+            },
+            type:'POST'
         });
     }
 
@@ -51,8 +73,11 @@ $( document ).ready( function() {
 <div>Long-polling example</div>
 <hr>
 <div>
-    <button id="start-long-polling">Start long-polling request</button><br>
-    <ul id="long-polling-results"></ul>
+    <span>Enter dossier id: <input type="text" id="dossier-id-input"></span>
+    <button id="register">Register for dossier updates</button>
+    <br>
+    <button id="simulate">Simulate notification event on dossier</button>
+    <ul id="results"></ul>
 </div>
 
 </body>
