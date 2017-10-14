@@ -10,6 +10,7 @@ import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +18,7 @@ import java.util.logging.Logger;
 public class LongPollingController {
 
     private static final DataFactory DATA_FACTORY = new DataFactory();
-    public static final Map<Long, String> EVENT_DATA = new HashMap<Long, String>(100);
+    public static final Map<Long, String> EVENT_DATA = new ConcurrentHashMap<Long, String>(100);
     private static final Logger LOGGER = Logger.getLogger(LongPollingController.class.getName());
 
     @GET
