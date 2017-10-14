@@ -6,7 +6,7 @@ This project is a derivative of <https://github.com/sgilda/wildfly-quickstart/tr
 Overview
 -----------
 
-This project demonstrates the use of JavaEE Asynchronous Servlets in order to support long-polling server-side push notifications.
+This project demonstrates the use of JavaEE Asynchronous Responses in order to support long-polling server-side push notifications.
 
 Deploying the application
 -------------------------
