@@ -20,7 +20,6 @@
                 console.log("Calling poll() with dossier id: " + dossierId);
                 $('#results').append("<li><span style=\"color:blue;\">Registered client for long-polling for dossier id "+dossierId+"</li>");
 
-
                 // simulate the WebSocket connection - this will always fail
                 if(useWebSockets) {
                     console.log("Simulating WebSocket failure.");
